@@ -3,8 +3,6 @@ import jsdom from "jsdom";
 import fetch from "node-fetch";
 import * as cheerio from "cheerio";
 
-const { JSDOM } = jsdom;
-
 const sectionId = [
   {
     id: 100,
@@ -24,41 +22,33 @@ const sectionId = [
   },
   {
     id: 104,
-    section: "세계",
+    section: "IT/과학",
   },
   {
     id: 105,
-    section: "정치",
+    section: "세계",
   },
 ];
 
 const crawlMainLink = async () => {
   const linkList = [];
-  const browser = await puppeteer.launch();
-  const promises = sectionId.map(async (el, idx) => {
-    const page = await browser.newPage();
-    await page.goto(
-      `https://news.naver.com/main/main.naver?mode=LSD&mid=shm&sid1=${el.id}`
-    );
 
-    const dom = await page.evaluate(() =>
-      new XMLSerializer().serializeToString(document)
-    );
-    const { document } = new JSDOM(dom).window;
-
-    const links = [];
-    const elements = document.querySelectorAll(".cluster_thumb_inner > a");
-
-    elements.forEach((el) => {
-      const link = el.href;
-      links.push(link);
-    });
-    linkList.push({ section: el.section, links });
-    await page.close();
+  const promises = sectionId.map(async (el) => {
+    const url = `https://news.naver.com/main/main.naver?mode=LSD&mid=shm&sid1=${el.id}`;
+    await fetch(url)
+      .then((res) => res.text()) // 응답을 문자열로 변환
+      .then((html) => {
+        const $ = cheerio.load(html);
+        const links = [];
+        $(".cluster_thumb_inner > a").each((_, el) => {
+          const link = $(el).attr("href");
+          links.push(link);
+        });
+        linkList.push({ section: el.section, links });
+      });
   });
-  fetch("https://n.news.naver.com/mnews/article/055/0001052066?sid=102");
+
   await Promise.all(promises);
-  await browser.close();
   return linkList;
 };
 
@@ -130,7 +120,7 @@ const crawlText = async (links) => {
 const crawler = async () => {
   const LinkData = await crawlMainLink();
   const realData = await crawlText(LinkData);
-  console.log(realData);
+  return realData;
 };
 
 crawler();
