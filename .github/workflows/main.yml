@@ -16,4 +16,4 @@ jobs:
       - name: Install dependencies
         run: npm install
       - name: Run script
-        run: node run-at-8am.js
+        run: node ./utils/saveDB.js
