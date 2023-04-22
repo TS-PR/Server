@@ -1,5 +1,3 @@
-import puppeteer from "puppeteer";
-import jsdom from "jsdom";
 import fetch from "node-fetch";
 import * as cheerio from "cheerio";
 
@@ -51,46 +49,6 @@ const crawlMainLink = async () => {
   await Promise.all(promises);
   return linkList;
 };
-
-// const crawlText = async (links) => {
-//   const browser = await puppeteer.launch();
-//   const data = [];
-
-//   const promises = links.map(async (el, idx) => {
-//     const textData = [];
-//     const pages = await Promise.all(
-//       el.links.map(async (el) => {
-//         const page = await browser.newPage();
-//         await page.goto(el);
-//         return page;
-//       })
-//     );
-
-//     const dataPromises = pages.map(async (page) => {
-//       try {
-//         const title = await page.$eval(
-//           ".media_end_head_title span",
-//           (el) => el.innerText
-//         );
-//         const $ = cheerio.load(page);
-
-//         const text = $("#dic_area");
-//         console.log(text);
-//         textData.push({ title, text });
-//         await page.close();
-//       } catch (err) {
-//         console.log(err);
-//       }
-//     });
-
-//     await Promise.all(dataPromises);
-//     data.push({ section: el.section, textData });
-//   });
-
-//   await Promise.all(promises);
-//   await browser.close();
-//   return data;
-// };
 
 const crawlText = async (links) => {
   const data = [];

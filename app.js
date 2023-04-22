@@ -3,7 +3,6 @@ import cors from "cors";
 import cookieParser from "cookie-parser";
 import morgan from "morgan";
 import helmet from "helmet";
-import saveTldrData from "./utils/saveDB.js";
 
 // import postRouter from "./router/tldr.js";
 
@@ -24,7 +23,5 @@ app.use(
 // app.use("/posts", (req, res) => {
 //   res.sendStatus(404);
 // });
-
-saveTldrData();
 
 app.listen(8080);

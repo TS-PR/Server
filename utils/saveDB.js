@@ -1,6 +1,7 @@
 import { connectDB, disconnectDB } from "../db/connect.js";
 import TLDR from "../models/post.js";
 import crawler from "./crawler.js";
+import cron from "node-cron";
 
 const saveTldrData = async () => {
   try {
@@ -22,4 +23,6 @@ const saveTldrData = async () => {
   }
 };
 
-export default saveTldrData;
+cron.schedule("0 8 * * *", () => {
+  saveTldrData();
+});
