@@ -81,6 +81,4 @@ const crawler = async () => {
   return realData;
 };
 
-crawler();
-
 export default crawler;
