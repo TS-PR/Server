@@ -7,6 +7,7 @@ import { config } from "dotenv";
 config();
 
 const saveTldrData = async () => {
+  console.log(process.MONGO_DB_PW);
   try {
     await connectDB(process.env.MONGO_DB_PW);
     const tldrData = crawler()
