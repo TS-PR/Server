@@ -1,6 +1,9 @@
 name: Run At 8AM
 
 on:
+  push:
+    branches:
+      - master
   schedule:
     - cron: "0 8 * * *"
 
@@ -14,6 +17,9 @@ jobs:
         with:
           node-version: "16.x"
       - name: Set environment variables
+        env:
+          MONGO_DB_PW: ${{ secrets.MONGO_DB_PW }}
+          GITHUB_ENV: ${{ github.workspace }}/.env
         run: echo "MONGO_DB_PW=${{ secrets.MONGO_DB_PW }}" >> $GITHUB_ENV
       - name: Install dependencies
         run: npm install
