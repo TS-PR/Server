@@ -1,6 +1,9 @@
 name: Run At 8AM
 
 on:
+  push:
+    branches:
+      - master
   schedule:
     - cron: "0 8 * * *"
 
