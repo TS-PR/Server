@@ -12,7 +12,6 @@ const saveTldrData = async () => {
     const tldrData = crawler()
       .then(() => console.log("login successed!"))
       .catch((err) => console.log(err));
-    console.log(tldrData);
     const promise = tldrData.map(async (el) => {
       try {
         await TLDR.updateOne({ section: el.section }, { posts: el.textData });
@@ -32,5 +31,3 @@ const saveTldrData = async () => {
 cron.schedule("0 8 * * *", () => {
   saveTldrData();
 });
-
-saveTldrData();
