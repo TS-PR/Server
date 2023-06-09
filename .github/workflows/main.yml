@@ -10,17 +10,24 @@ on:
 jobs:
   run-at-8am:
     runs-on: ubuntu-latest
+    services:
+      mongo:
+        image: mongo
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 27017:27017 # Corrected port mapping
+
     steps:
-      - uses: actions/checkout@v2
+      - name: Checkout code
+        uses: actions/checkout@v2
       - name: Use Node.js
         uses: actions/setup-node@v2.2.0
         with:
           node-version: "16.x"
-      - name: Set environment variables
-        env:
-          MONGO_DB_PW: ${{ secrets.MONGO_DB_PW }}
-          GITHUB_ENV: ${{ github.workspace }}/.env
-        run: echo "MONGO_DB_PW=${{ secrets.MONGO_DB_PW }}" >> $GITHUB_ENV
       - name: Install dependencies
         run: npm install
       - name: Run script
