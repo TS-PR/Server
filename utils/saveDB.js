@@ -4,17 +4,15 @@ import crawler from "./crawler.js";
 
 const saveTldrData = async () => {
   try {
-    connectDB();
-    const tldrData = await crawler();
-    const promise = tldrData.map(async (el) => {
-      try {
+    connectDB().then(async () => {
+      const tldrData = await crawler();
+      const promise = tldrData.map(async (el) => {
         await TLDR.updateOne({ section: el.section }, { posts: el.textData });
-      } catch (err) {
-        console.error(err);
-      }
+      });
+      4;
+      await Promise.all(promise);
+      disconnectDB();
     });
-    await Promise.all(promise);
-    disconnectDB();
   } catch (err) {
     console.error(err);
     disconnectDB();

@@ -77,7 +77,7 @@ const crawlText = async (links) => {
 
 const crawler = async () => {
   const LinkData = await crawlMainLink();
-  console.log(LinkData);
+
   const realData = await crawlText(LinkData);
 
   return realData;
