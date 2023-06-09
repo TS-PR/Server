@@ -10,17 +10,6 @@ on:
 jobs:
   run-at-8am:
     runs-on: ubuntu-latest
-    services:
-      mongo:
-        image: mongo
-        options: >-
-          --health-cmd pg_isready
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
-        ports:
-          - 27018:27017 # Corrected port mapping
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
