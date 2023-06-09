@@ -38,7 +38,7 @@ const crawlMainLink = async () => {
       .then((html) => {
         const $ = cheerio.load(html);
         const links = [];
-        $(".cluster_thumb_inner > a").each((_, el) => {
+        $(".sh_text > a").each((_, el) => {
           const link = $(el).attr("href");
           links.push(link);
         });
@@ -77,7 +77,9 @@ const crawlText = async (links) => {
 
 const crawler = async () => {
   const LinkData = await crawlMainLink();
+  console.log(LinkData);
   const realData = await crawlText(LinkData);
+
   return realData;
 };
 
