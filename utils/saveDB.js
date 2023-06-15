@@ -1,26 +1,24 @@
 import { connectDB, disconnectDB } from "../db/connect.js";
-import TLDR from "../models/post.js";
+import { TLDR, ID } from "../models/post.js";
 import crawler from "./crawler.js";
 
-const saveTldrData = async () => {
+(async () => {
   try {
-    connectDB()
-      .then(async () => {
-        const tldrData = await crawler();
-        const promise = tldrData.map(async (el) => {
-          await TLDR.updateOne({ section: el.section }, { posts: el.textData });
-        });
+    await connectDB();
+    const data = await crawler();
 
-        await Promise.all(promise);
-        disconnectDB();
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    const promise = async () => {
+      try {
+        await TLDR.updateOne({}, { posts: data }, { upsert: true });
+      } catch (err) {
+        console.error(err);
+      }
+    };
+
+    await promise();
   } catch (err) {
     console.error(err);
+  } finally {
     disconnectDB();
   }
-};
-
-saveTldrData();
+})();

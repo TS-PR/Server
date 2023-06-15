@@ -1,12 +1,14 @@
 import mongoose from "mongoose";
 
-export const connectDB = (env) => {
-  const uri = `mongodb+srv://hosmimam:${env}@cluster0.u88ojk6.mongodb.net/?retryWrites=true&w=majority`;
-  return mongoose.connect(uri);
+export const connectDB = async () => {
+  const uri = `mongodb+srv://hosmimam:FfGiAwrFvYuN8xhz@cluster0.u88ojk6.mongodb.net/?retryWrites=true&w=majority`;
+
+  await mongoose.connect(uri, {
+    useUnifiedTopology: true,
+    useNewUrlParser: true,
+  });
 };
 
-export const disconnectDB = () => {
-  mongoose.connection.close();
+export const disconnectDB = async () => {
+  await mongoose.connection.close();
 };
-
-console.log(connectDB());

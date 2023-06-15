@@ -3,9 +3,10 @@ import mongoose from "mongoose";
 const Schema = mongoose.Schema;
 
 const tldrSchema = new Schema({
-  section: String,
-  posts: { type: Array, post: String },
+  posts: { type: Array, post: Object },
   createdAt: { type: Date, default: Date.now },
 });
 
-export default mongoose.model("TLDR", tldrSchema);
+const TLDR = mongoose.model("TLDR", tldrSchema);
+
+export { TLDR };

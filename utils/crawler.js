@@ -1,5 +1,6 @@
 import fetch from "node-fetch";
 import * as cheerio from "cheerio";
+import { v4 as uuidv4 } from "uuid";
 
 const sectionId = [
   {
@@ -52,23 +53,34 @@ const crawlMainLink = async () => {
 
 const crawlText = async (links) => {
   const data = [];
-  const promises = links.map(async (el) => {
-    const textData = [];
+  const promises = links.map(async (item) => {
     await Promise.all(
-      el.links.map(async (el) => {
+      item.links.map(async (el) => {
         await fetch(`${el}`)
           .then((res) => res.text())
           .then((html) => {
             const $ = cheerio.load(html);
-            const text = $("#dic_area")
+            const body = $("#dic_area")
               .text()
               .replace(/[\t\n]/g, "");
-            textData.push(text);
+            const title = $(".media_end_head_headline").text();
+            const date = $("._ARTICLE_DATE_TIME").text();
+            const thumbnail = $("#img1")["0"]?.attribs["data-src"];
+            const id = uuidv4();
+            const eachPost = {
+              title,
+              body,
+              date,
+              href: el,
+              thumbnail,
+              id,
+              section: item.section,
+            };
+            data.push(eachPost);
           })
-          .catch((err) => console.log("hi"));
+          .catch((err) => console.log(err));
       })
     );
-    data.push({ section: el.section, textData });
   });
 
   await Promise.all(promises);
@@ -77,7 +89,6 @@ const crawlText = async (links) => {
 
 const crawler = async () => {
   const LinkData = await crawlMainLink();
-
   const realData = await crawlText(LinkData);
 
   return realData;
