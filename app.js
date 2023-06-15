@@ -17,9 +17,8 @@ app.use(helmet());
 
 app.use(
   cors({
-    origin: ["http://127.0.0.1:5500"], // 허용할 origin
-    optionsSuccessStatus: 200, // 기본 요청 success code
-    credentials: true, // reqeust credential이 포함되있을 경우 response에서 보여줄지 아닐지
+    origin: "*",
+    optionsSuccessStatus: 200,
   })
 );
 
